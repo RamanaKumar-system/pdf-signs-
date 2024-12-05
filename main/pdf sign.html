@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Signature Tool</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f9;
+        }
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+        }
+        .upload-area {
+            margin: 20px 0;
+            border: 2px dashed #ccc;
+            padding: 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            color: #777;
+        }
+        .upload-area:hover {
+            border-color: #007bff;
+            color: #007bff;
+        }
+        input[type="file"] {
+            display: none;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            margin-top: 20px;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+        #file-list, #signature-preview {
+            margin-top: 20px;
+            text-align: left;
+        }
+        .file-item, .signature-image {
+            margin: 10px 0;
+            font-size: 14px;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            max-height: 150px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>PDF Signature Tool</h1>
+        
+        <!-- Upload PDF Section -->
+        <label for="upload-pdf" class="upload-area" id="pdf-dropzone">
+            Drag & Drop PDF Files Here or Click to Upload
+        </label>
+        <input type="file" id="upload-pdf" accept="application/pdf" multiple>
+
+        <!-- Uploaded PDF List -->
+        <div id="file-list"></div>
+
+        <!-- Upload Signature Image Section -->
+        <label for="upload-signature" class="upload-area">
+            Drag & Drop Signature Image Here or Click to Upload
+        </label>
+        <input type="file" id="upload-signature" accept="image/*">
+
+        <!-- Signature Image Preview -->
+        <div id="signature-preview"></div>
+
+        <!-- Convert Button -->
+        <button class="button" id="convert-btn">Convert</button>
+
+        <!-- Download Zip Button -->
+        <div id="download-section">
+            <button class="button" id="download-zip-btn" style="display:none;">Download All PDFs (ZIP)</button>
+        </div>
+    </div>
+
+    <script>
+        const pdfInput = document.getElementById('upload-pdf');
+        const signatureInput = document.getElementById('upload-signature');
+        const fileList = document.getElementById('file-list');
+        const signaturePreview = document.getElementById('signature-preview');
+        const convertButton = document.getElementById('convert-btn');
+        const downloadZipButton = document.getElementById('download-zip-btn');
+
+        let pdfFiles = [];
+        let signatureFile = null;
+
+        // Display PDF List
+        pdfInput.addEventListener('change', () => {
+            pdfFiles = [...pdfInput.files];
+            fileList.innerHTML = "<h3>Uploaded PDF Files:</h3>";
+            pdfFiles.forEach((file, index) => {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item';
+                fileItem.textContent = `${index + 1}. ${file.name}`;
+                fileList.appendChild(fileItem);
+            });
+        });
+
+        // Preview Signature Image
+        signatureInput.addEventListener('change', () => {
+            signatureFile = signatureInput.files[0];
+            if (signatureFile) {
+                const reader = new FileReader();
+                reader.onload = () => {
+                    signaturePreview.innerHTML = "<h3>Signature Preview:</h3>";
+                    const img = document.createElement('img');
+                    img.src = reader.result;
+                    img.alt = 'Signature Preview';
+                    signaturePreview.appendChild(img);
+                };
+                reader.readAsDataURL(signatureFile);
+            }
+        });
+
+        // Simulate Conversion and Enable Zip Download Button
+        convertButton.addEventListener('click', () => {
+            if (pdfFiles.length === 0 || !signatureFile) {
+                alert('Please upload both PDF files and a signature image.');
+                return;
+            }
+            alert('Processing files... (This requires backend implementation)');
+            // Simulate backend processing and enable zip download button
+            setTimeout(() => {
+                downloadZipButton.style.display = 'block';
+            }, 2000);
+        });
+
+        // Simulate Downloading ZIP File
+        downloadZipButton.addEventListener('click', () => {
+            // Simulate downloading the zip file
+            alert('ZIP file is ready for download (backend functionality required).');
+            window.location.href = '/download/modified_pdfs.zip'; // Replace with actual backend endpoint
+        });
+    </script>
+</body>
+</html>
